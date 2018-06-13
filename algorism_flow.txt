@@ -1,0 +1,22 @@
+dot(( L2 * (2*C_231 + C_132 + C_321) - D_21 * C_131_add_221 - 3.0*(D_31 + D_22)*C_121 ), PD[0] / L4T )
++
+dot(( L2 * C_131_add_221 - 3.0*D_21*C_121 ), ( PD[1] / L4T - (PD[0] * ( 4.0 * D_21 * T2 + L2 * (C_21.C_31) ) / L2T^3) ))
+vec3 PD[3];
+setPD(param, PD);
+vec3 C_132         = cross(PD[0], cross(PD[2], PD[1]))
+vec3 C_321         = cross(PD[2], cross(PD[1], PD[0]))
+vec3 C_31          = cross(PD[2], PD[0])
+vec3 C_21          = cross(PD[1], PD[0])
+vec3 C_231         = cross(PD[1], C_31)
+vec3 C_121         = cross(PD[0], C_21)
+vec3 C_131         = cross(PD[0], C_31)
+vec3 C_221         = cross(PD[1], C_21)
+vec3 C_131_add_221 = C_131 + C_221
+float D_21          = dot(PD[1], PD[0])
+float D_31          = dot(PD[2], PD[0])
+float D_22          = dot(PD[1], PD[1])
+float L2 = L^2      = dot(PD[0], PD[0])
+float T2 = T^2      = dot(C_21, C_21)
+float T             = T2^(1/2)
+float L2T           = L2*T
+float L4T           = L2*L2*T

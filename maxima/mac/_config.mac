@@ -1,0 +1,10 @@
+set_random_state(make_random_state(true));
+display2d: false;
+ttyoff: true;
+sqrtdispflag: false;
+/*grind: true;*/
+set_plot_option([plot_format, gnuplot]);
+set_plot_option([gnuplot_term, "png size 4000,4000"]);
+set_plot_option([gnuplot_out_file, "/root/workdir/test.png"]);
+set_plot_option([style, [lines, 3]]);
+load("vect");

@@ -1,0 +1,34 @@
+
+load("/root/workdir/mac/_config.mac");
+unorder();
+ordergreat(t);
+c_0: [x_0, y_0];
+c_1: [x_1, y_1];
+c_2: [x_2, y_2];
+altCoef1: [
+  3.0*c_2,
+  2.0*c_1,
+  c_0
+];
+altCoef2: [
+  0.0,
+  6.0*c_2,
+  2.0*c_1
+];
+T: [t^2, t^1, 1.0];
+Flip: matrix(
+  [0.0,-1.0],
+  [1.0, 0.0]
+);
+P_0: altCoef1.T;
+P_1: (altCoef2.T).Flip;
+define(T(t), P_0.P_1[1]);
+altCoef: [
+  ratcoef(T(t), t, 3),
+  ratcoef(T(t), t, 2),
+  ratcoef(T(t), t, 1),
+  ratcoef(T(t), t, 0)
+];
+T2: [t^3, t^2, t^1, 1.0];
+writefile("/root/workdir/output");
+altCoef;

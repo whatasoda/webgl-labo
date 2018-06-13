@@ -1,0 +1,114 @@
+load("/root/workdir/mac/_config.mac");
+p_0: [random(1.0),random(1.0),random(1.0)];
+p_1: [random(1.0),random(1.0),random(1.0)];
+p_2: [random(1.0),random(1.0),random(1.0)];
+p_3: [random(1.0),random(1.0),random(1.0)];
+Coef: [
+         p_0,
+    -3.0*p_0 + 3.0*p_1,
+     3.0*p_0 - 6.0*p_1 + 3.0*p_2,
+        -p_0 + 3.0*p_1 - 3.0*p_2 + p_3
+];
+isOnField: express((p_1 - p_0) ~ (p_2 - p_0)).(p_3 - p_0);
+T: [1, t, t^2, t^3];
+/*T2: [t^4, t^3, t^2, t^1, 1];*/
+/*cA: express(p_0~p_1);*/
+/*cB: express(p_1~p_2);*/
+/*cC: express(p_2~p_3);*/
+/*cD: express(p_3~p_0);*/
+/*cE: express(p_0~p_2);*/
+/*cF: express(p_1~p_3);*/
+/*d_u0: d_0 / sqrt(d_0.d_0);
+d_u1: d_1 / sqrt(d_1.d_1);
+d_u2: d_2 / sqrt(d_2.d_2);
+axis_d: express((d_1 - d_0) ~ (d_2 - d_1));
+d_g : -(d_u0 + d_u1 + d_u2)/3;
+iA: -   cA - 3.0*cB - cC + cD + 2.0*cE + 2.0*cF;
+iB: 2.0*cA + 3.0*cB      - cD - 3.0*cE -     cF;
+iC: -   cA -     cB           +     cE;
+Coef2: [
+    iA.iA,
+    2.0*(iA.iB),
+    2.0*(iA.iC) + (iB.iB),
+    2.0*(iB.iC),
+    iC.iC
+];*/
+
+/*define(o_0(t), (p_1 + d_1*t) - (p_0 + d_0*t));*/
+/*define(o_1(t), (p_1 + d_1*t) - (p_2 + d_2*t));*/
+/*define(test(t), Coef2.T2);*/
+/*define(test(t), Coef2.T2/ (o_0(t).o_0(t)) / (o_1(t).o_1(t)));*/
+/*define(test\'(t), diff(test(t), t, 1));*/
+define(p(t)         , Coef.T);
+define(p\'(t)       , diff(p(t), t, 1));
+define(p\'\'(t)     , diff(p(t), t, 2));
+define(p\'\'\'(t)   , diff(p(t), t, 3));
+/*plen\'              : sqrt(p\'(t).p\'(t));*/
+/*plen\'\'            : sqrt(p\'\'(t).p\'\'(t));*/
+/*plen\'\'\'          : sqrt(p\'\'\'(t).p\'\'\'(t));*/
+/*define(p_u\'(t)     , p\'(t)      / plen\' );*/
+/*define(p_u\'\'(t)   , p\'\'(t)    / plen\' );*/
+/*define(p_u\'\'\'(t) , p\'\'\'(t)  / plen\'\'\' );*/
+
+/*define(test4(t)         , p\'(t) . diff(express(p\'(t) ~ express(p\'\'(t) ~ p\'(t))), t, 1) );*/
+/*define(test4\'(t)       , diff(test4(t), t, 1) );*/
+/*define(temp(t)          , express(p_u\'\'(t) ~ p_u\'(t)) );*/
+/*define(test4_u(t)       , p_u\'(t) . diff(express(p_u\'(t) ~ express(p_u\'\'(t) ~ p_u\'(t))) / sqrt(temp(t).temp(t)), t, 1) );*/
+/*define(test4_u2(t)       , p_u\'(t) . diff(express(p_u\'(t) ~ express(p_u\'\'(t) ~ p_u\'(t))), t, 1) / sqrt(temp(t).temp(t)) );*/
+/*define(test4_u\'(t)     , diff(test4_u(t), t, 1) );*/
+/*define(test4_u2\'(t)     , diff(test4_u2(t), t, 1) );*/
+/*define(crossP(t), express(p\'\'(t) ~ p\'(t)) );*/
+/*define(r(t), sqrt( crossP(t).crossP(t) )*( (p\'(t).p\'(t) )^(-3/2) ) );*/
+/*define(r\'(t), diff(r(t), t, 1));*/
+
+PD: [
+  p\'(t),
+  p\'\'(t),
+  p\'\'\'(t)
+];
+C_132         : express(PD[1] ~ express(PD[3]~PD[2]));
+C_321         : express(PD[3] ~ express(PD[2]~PD[1]));
+C_31          : express(PD[3] ~ PD[1]);
+C_21          : express(PD[2] ~ PD[1]);
+C_231         : express(PD[2] ~ C_31);
+C_121         : express(PD[1] ~ C_21);
+C_131         : express(PD[1] ~ C_31);
+C_221         : express(PD[2] ~ C_21);
+C_131_add_221 : C_131 + C_221;
+
+D_21          : PD[2]. PD[1];
+D_31          : PD[3]. PD[1];
+D_22          : PD[2]. PD[2];
+L2            : PD[1]. PD[1];
+T2            : C_21 . C_21;
+T             : T2^(1/2);
+L4            : L2*L2;
+L2T           : L2*T;
+L4T           : L4*T;
+define(test5(t),
+  ( L2 * (2*C_231 + C_132 + C_321) - D_21 * C_131_add_221 - 3.0*(D_31 + D_22)*C_121 ).( PD[1] / L4T ) + ( L2 * C_131_add_221 - 3.0*D_21*C_121 ).( PD[2] / L4T - (PD[1] * ( 4.0 * D_21 * T2 + L2 * (C_21.C_31) ) / L2T^3) )
+);
+
+
+
+plot2d([
+    /*r(t),*/
+    /*r\'(t),*/
+    /*-test4_u(t),*/
+    /*-test4_u\'(t),*/
+    -test5(t),
+    T * 100
+    /*test4_u2(t),*/
+    /*test4_u2\'(t)*/
+  ],
+  [t,-1,2]
+)$
+/*out: labels(outchar);*/
+/*keepfloat: true;*/
+/*testT: ratsimp(T);*/
+/*writefile("/root/workdir/output");*/
+save("/root/workdir/output", isOnField);
+/*ratcoef(testT, t, 3);*/
+/*test5(t);*/
+/*for i:1 step 1 thru length(out) do print(tex1(tex(out[i], false)));*/
+/*playback();*/
